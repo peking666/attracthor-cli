@@ -3,3 +3,5 @@
 pkg install php
 
 php attracthor.php
+
+
