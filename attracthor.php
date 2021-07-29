@@ -54,7 +54,7 @@ sleep(5);
 menu:
 system('clear');
 print $bar;
-print "MENU:\n[1] SELECT TARGET\n[2] MODE SETTINGS\n[3] LIST PASSWORDS\n[4] REBOOT\n[5] START\n\n[>]Select: ";
+print "MENU:\n[1] SELECT TARGET\n[2] MODE SETTINGS\n[3] LIST PASSWORDS\n[4] STATUS\n[5] REBOOT\n[6] RESET\n[7] START\n\n[>]Select: ";
 $menu = trim(fgets(STDIN));
 if($menu == 1){
   goto select;
@@ -66,12 +66,31 @@ if($menu == 3){
   goto pass;
 }
 if($menu == 4){
+  goto status;
+}
+if($menu == 5){
 $rebot = get('http://192.168.4.1/reboot');
   goto menu;
 }
-if($menu ==  5){
-  print '["PLEASE TURN OFF YOU WIFI TO START MODE & BACK AGAIN"]';
+if($menu == 6){
+  $reset = get('http://192.168.4.1/reset');
+  goto menu;
+}
+if($menu ==  7){
+  print '["PLEASE TURN OFF YOU WIFI TO START ATTACK & BACK AGAIN"]';
   sleep("15");
+  goto menu;
+}
+status:
+system("clear");
+print $bar;
+$sts = get('http://192.168.4.1/status');
+print $sts;
+print "\n\n[5]BACK MENU\n\n[>]Select: ";
+$stat = trim(fgets(STDIN));
+if($stat == 5){
+  goto menu;
+}else{
   goto menu;
 }
 select:
@@ -109,7 +128,7 @@ $inputv = $getv[0];
 $target = $targe[0];
 $autor = $obot[0];
 print $bar;
-print "\nWifi Target: [$target]\nAttack Mode\n[1]Deauth [$deauth]\n[2]Input Validation[$inputv]\n[3]Auto Reboot [$autor]\n\n[4]BACK MENU\n[>]Select: ";
+print "\nWifi Target: [$target]\n\nAttack Mode\n[1]Deauth [$deauth]\n[2]Input Validation[$inputv]\n[3]Auto Reboot [$autor]\n\n[4]BACK MENU\n[>]Select: ";
 $mode = trim(fgets(STDIN));
 if($mode == 1){
 $getdeauth = get('http://192.168.4.1/o_deauth');
@@ -129,7 +148,6 @@ $getautor = get('http://192.168.4.1/o_autoreboot');
 if($mode == 4){
   goto menu;
 }
-
 pass:
 system('clear');
 print $bar;
