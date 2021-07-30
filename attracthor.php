@@ -86,6 +86,7 @@ if($menu ==  7){
   sleep("15");
   goto menu;
 }
+goto menu;
 status:
 system("clear");
 print $bar;
@@ -164,6 +165,7 @@ $getautor = get('http://192.168.4.1/o_autoreboot');
 if($mode == 4){
   goto menu;
 }
+goto menu;
 pass:
 system('clear');
 print $bar;
