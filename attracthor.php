@@ -54,6 +54,10 @@ sleep(5);
 menu:
 system('clear');
 print $bar;
+$tmenu= get('http://192.168.4.1/setup');
+$targe = explode('/survey>', $tmenu);
+$targe = explode('</a>', $targe[1]);
+$target = $targe[0];
 print "TARGET: [$target]\n\nMENU:\n[1] SELECT TARGET\n[2] MODE SETTINGS\n[3] LIST PASSWORDS\n[4] STATUS\n[5] REBOOT\n[6] RESET\n[7] START\n\n[>]Select: ";
 $menu = trim(fgets(STDIN));
 if($menu == 1){
@@ -121,10 +125,6 @@ if($selet == 0){
   goto menu;
 }
 $set = $bom[$selet];
-$getmenu= get('http://192.168.4.1/setup');
-$targe = explode('/survey>', $getmenu);
-$targe = explode('</a>', $targe[1]);
-$target = $targe[0];
 $gas = get("http://192.168.4.1/settarget?$set");
 $save = fopen('ssid.txt', "w");
     fputs($save, "");
@@ -132,6 +132,8 @@ $save = fopen('ssid.txt', "w");
 goto menu;
 option:
 system("clear");
+print $bar;
+$getmenu= get('http://192.168.4.1/setup');
 $obot = explode('o_autoreboot>', $getmenu);
 $obot = explode('</a>', $obot[1]);
 $getd = explode('o_deauth>', $getmenu);
@@ -141,7 +143,7 @@ $getv = explode('</a>', $getv[1]);
 $deauth = $getd[0];
 $inputv = $getv[0];
 $autor = $obot[0];
-print $bar;
+
 print "\nWifi Target: [$target]\n\nAttack Mode\n[1]Deauth [$deauth]\n[2]Input Validation[$inputv]\n[3]Auto Reboot [$autor]\n\n[4]BACK MENU\n[>]Select: ";
 $mode = trim(fgets(STDIN));
 if($mode == 1){
