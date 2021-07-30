@@ -54,7 +54,11 @@ sleep(5);
 menu:
 system('clear');
 print $bar;
-print "MENU:\n[1] SELECT TARGET\n[2] MODE SETTINGS\n[3] LIST PASSWORDS\n[4] STATUS\n[5] REBOOT\n[6] RESET\n[7] START\n\n[>]Select: ";
+$getmenu= get('http://192.168.4.1/setup');
+$targe = explode('/survey>', $getmenu);
+$targe = explode('</a>', $targe[1]);
+$target = $targe[0];
+print "TARGET: [$target]\n\nMENU:\n[1] SELECT TARGET\n[2] MODE SETTINGS\n[3] LIST PASSWORDS\n[4] STATUS\n[5] REBOOT\n[6] RESET\n[7] START\n\n[>]Select: ";
 $menu = trim(fgets(STDIN));
 if($menu == 1){
   goto select;
@@ -99,30 +103,35 @@ system("clear");
 print $bar;
 print "[*] BSSID&SSID List:\n\n";
 $survey = get('http://192.168.4.1/survey');
-  for($a=1; $a<7; $a++){
+  for($a=0; $a<10; $a++){
   $list = explode('?', $survey);
   $list = explode('>', $list[$a]);
   $h = $list[0];
   if($h == ""){
     
   }else{
-    print " [-] $h\n";
+    print "[$a] $h\n";
+     $save = fopen('ssid.txt', "a");
+    fputs($save, "$h\n");
+    fclose($save);
   }
 }
-  
-print "\n[5]BACK MENU \n";
-print "\n[>]Copy BSSID&SSID in here: ";
+$file = file_get_contents("ssid.txt");
+$bom = explode("\n",$file);
+print "\n[0]BACK MENU \n";
+print "\n[>]Select: ";
 $selet = trim(fgets(STDIN));
-if($selet == 5){
+if($selet == 0){
   goto menu;
 }
-$gas = get("http://192.168.4.1/settarget?$selet");
+$set = $bom[$selet];
+$gas = get("http://192.168.4.1/settarget?$set");
+$save = fopen('ssid.txt', "w");
+    fputs($save, "");
+    fclose($save);
 goto menu;
 option:
 system("clear");
-$getmenu= get('http://192.168.4.1/setup');
-$targe = explode('/survey>', $getmenu);
-$targe = explode('</a>', $targe[1]);
 $obot = explode('o_autoreboot>', $getmenu);
 $obot = explode('</a>', $obot[1]);
 $getd = explode('o_deauth>', $getmenu);
@@ -131,7 +140,6 @@ $getv = explode('o_inputvalid>', $getmenu);
 $getv = explode('</a>', $getv[1]);
 $deauth = $getd[0];
 $inputv = $getv[0];
-$target = $targe[0];
 $autor = $obot[0];
 print $bar;
 print "\nWifi Target: [$target]\n\nAttack Mode\n[1]Deauth [$deauth]\n[2]Input Validation[$inputv]\n[3]Auto Reboot [$autor]\n\n[4]BACK MENU\n[>]Select: ";
