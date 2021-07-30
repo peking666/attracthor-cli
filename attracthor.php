@@ -77,6 +77,7 @@ if($menu == 6){
   goto menu;
 }
 if($menu ==  7){
+  print "[*] TARGET: $target\n";
   print '["PLEASE TURN OFF YOU WIFI TO START ATTACK & BACK AGAIN"]';
   sleep("15");
   goto menu;
@@ -96,12 +97,17 @@ if($stat == 5){
 select:
 system("clear");
 print $bar;
-print "[*] BSSID&SSID List:\n";
+print "[*] BSSID&SSID List:\n\n";
 $survey = get('http://192.168.4.1/survey');
   for($a=1; $a<7; $a++){
   $list = explode('?', $survey);
   $list = explode('>', $list[$a]);
-  print "\n $list[0]";
+  $h = $list[0];
+  if($h == ""){
+    
+  }else{
+    print " [-] $h\n";
+  }
 }
   
 print "\n[5]BACK MENU \n";
@@ -153,10 +159,14 @@ system('clear');
 print $bar;
 $info = get('http://192.168.4.1/password.txt');
 print "Password:\n$info\n";
-print "[5]BACK MENU\n\n[>]Select: ";
+print "[4]CLEAR PASSWORDS\n[5]BACK MENU\n\n[>]Select: ";
 $ps = trim(fgets(STDIN));
 if($ps == 5){
   goto menu;
+}
+if($ps == 4){
+  $delet = get('192.168.4.1/clear_passwords');
+  goto pass;
 }
 }else{
   print "Password Wrong\n";
