@@ -137,11 +137,11 @@ goto menu;
 fm:
 system("clear");
 print $bar;
-print "[*] File\n\n";
-$save = fopen('fm.txt', "a");
-    fputs($save, "\n");
-    fclose($save);
-for($a=1; $a<5; $a++){
+print "[*] File Manager\n\n";
+$save2 = fopen('fm.txt', "a");
+    fputs($save2, "\n");
+    fclose($save2);
+for($a=1; $a<3; $a++){
 $fm = get("http://192.168.4.1/fm");
 $fil = explode('href=http://192.168.4.1/', $fm);
 $fil = explode('>', $fil[$a]);
@@ -150,21 +150,23 @@ if($f == ""){
      
    }else{
      print "[$a] $f\n";
-     $save = fopen('fm.txt', "a");
-    fputs($save, "$f\n");
-    fclose($save);
+     $save2 = fopen('fm.txt', "a");
+    fputs($save2, "$f\n");
+    fclose($save2);
    }
 }
 $file2 = file_get_contents("fm.txt");
 $bom2 = explode("\n",$file2);
-print "\n\n[>]Select: ";
+print "\n\n[0]BACK MENU\n[>]Select: ";
 $fmi = trim(fgets(STDIN));
 $fmh = $bom2[$fmi];
-print $fmh;
+if($fmi == 0){
+  goto menu;
+}
 $setfw = get("http://192.168.4.1/fm?action=setpage&file=/$fmh");
-$save = fopen('fm.txt', "w");
-    fputs($save, "\n");
-    fclose($save);
+$save2 = fopen('fm.txt', "w");
+    fputs($save2, "\n");
+    fclose($save2);
 goto menu;
 option:
 system("clear");
